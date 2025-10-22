@@ -2,9 +2,6 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { google } from "googleapis";
-import { resolve } from "path";
-
-const keyPath = resolve(__dirname, "./config/credentials.json");
 
 dotenv.config();
 
@@ -17,7 +14,7 @@ app.use(cors({ origin: CORS_ORIGIN }));
 app.use(express.json());
 
 const auth = new google.auth.GoogleAuth({
-  keyFile: keyPath,
+  keyFile: "./config/credentials.json",
   scopes: ["https://www.googleapis.com/auth/spreadsheets"],
 });
 
