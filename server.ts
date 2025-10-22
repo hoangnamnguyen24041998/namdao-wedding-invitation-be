@@ -19,10 +19,22 @@ app.use(express.json());
 // const __dirname = path.dirname(__filename);
 // const CREDENTIALS_PATH = path.resolve(__dirname, "credentials.json");
 
+// Securely parse credentials from environment variable for Vercel
+// const credentials = process.env.GOOGLE_CREDENTIALS
+//   ? JSON.parse(process.env.GOOGLE_CREDENTIALS)
+//   : undefined;
+
 const auth = new google.auth.GoogleAuth({
-  keyFile: "./credentials.json",
+  //   credentials,
+  //   keyFile: credentials ? undefined : "./credentials.json",
+  //   scopes: ["https://www.googleapis.com/auth/spreadsheets"],
+  credentials: {
+    client_email: process.env.GOOGLE_CLIENT_EMAIL,
+    private_key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
+  },
   scopes: ["https://www.googleapis.com/auth/spreadsheets"],
 });
+
 
 const sheets = google.sheets({ version: "v4", auth });
 
