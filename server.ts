@@ -12,13 +12,26 @@ const PORT = process.env.PORT || 3002;
 const SHEET_ID = process.env.GOOGLE_SHEET_ID;
 const CORS_ORIGIN = process.env.CORS_ORIGIN || "*";
 
-let corsOptions: cors.CorsOptions = {
+// let corsOptions: cors.CorsOptions = {
+//   methods: ["GET", "POST", "OPTIONS"],
+// };
+
+// const allowedOrigins = CORS_ORIGIN.split(",").map((url) => url.trim());
+// corsOptions.origin = allowedOrigins;
+
+
+const corsOptions = {
+  origin: [
+    "http://localhost:5173",
+    "https://hnxd.io.vn",
+    "https://namdao-wedding-invitation-be.vercel.app",
+  ],
   methods: ["GET", "POST", "OPTIONS"],
+  credentials: true,
 };
 
-const allowedOrigins = CORS_ORIGIN.split(",").map((url) => url.trim());
-corsOptions.origin = allowedOrigins;
 app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 app.use(express.json());
 
 // const __filename = fileURLToPath(import.meta.url);
