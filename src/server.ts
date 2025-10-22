@@ -23,7 +23,7 @@ const auth = new google.auth.GoogleAuth({
 
 const sheets = google.sheets({ version: "v4", auth });
 
-app.post("/api/confirm-attend", async (req: Request, res: Response) => {
+app.post("/confirm-attend", async (req: Request, res: Response) => {
   try {
     const { name, attendance, quantity, side } = req.body;
     if (!name || !attendance || !quantity || !side) {
