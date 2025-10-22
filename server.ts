@@ -24,6 +24,7 @@ const corsOptions = {
   origin: [
     "http://localhost:5173",
     "https://hnxd.io.vn",
+    "https://www.hnxd.io.vn",
     "https://namdao-wedding-invitation-be.vercel.app",
   ],
   methods: ["GET", "POST", "OPTIONS"],
