@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { google } from "googleapis";
@@ -23,55 +23,58 @@ const auth = new google.auth.GoogleAuth({
 
 const sheets = google.sheets({ version: "v4", auth });
 
-app.post("/confirm-attend", async (req: Request, res: Response) => {
-  try {
-    const { name, attendance, quantity, side } = req.body;
-    if (!name || !attendance || !quantity || !side) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Missing fields" });
-    }
+app.post(
+  "/confirm-attend",
+  async (req: express.Request, res: express.Response) => {
+    try {
+      const { name, attendance, quantity, side } = req.body;
+      if (!name || !attendance || !quantity || !side) {
+        return res
+          .status(400)
+          .json({ success: false, message: "Missing fields" });
+      }
 
-    const date = new Date().toLocaleString("vi-VN", {
-      timeZone: "Asia/Ho_Chi_Minh",
-    });
-    const row = [date, name, attendance, quantity, side];
-
-    const readRes = await sheets.spreadsheets.values.get({
-      spreadsheetId: SHEET_ID,
-      range: "A1:E1",
-    });
-
-    const values = readRes.data.values || [];
-
-    // If no header exists, write headers first, then append the new data row.
-    if (values.length === 0) {
-      const headers = ["Thời gian", "Tên", "Xác nhận", "Số lượng", "Bên"];
-      await sheets.spreadsheets.values.append({
-        spreadsheetId: SHEET_ID,
-        range: "A:E",
-        valueInputOption: "USER_ENTERED",
-        requestBody: { values: [headers, row] },
+      const date = new Date().toLocaleString("vi-VN", {
+        timeZone: "Asia/Ho_Chi_Minh",
       });
-      console.log("📝 Header row added:", headers);
-      console.log("✅ Added new row:", row);
-    } else {
-      // Append the new data row
-      await sheets.spreadsheets.values.append({
-        spreadsheetId: SHEET_ID,
-        range: "A:E",
-        valueInputOption: "USER_ENTERED",
-        requestBody: { values: [row] },
-      });
-      console.log("✅ Added new row:", row);
-    }
+      const row = [date, name, attendance, quantity, side];
 
-    res.json({ success: true, message: "Data added to Google Sheets" });
-  } catch (err: any) {
-    console.error("❌ Google Sheets API error:", err);
-    res.status(500).json({ success: false, message: err.message });
+      const readRes = await sheets.spreadsheets.values.get({
+        spreadsheetId: SHEET_ID,
+        range: "A1:E1",
+      });
+
+      const values = readRes.data.values || [];
+
+      // If no header exists, write headers first, then append the new data row.
+      if (values.length === 0) {
+        const headers = ["Thời gian", "Tên", "Xác nhận", "Số lượng", "Bên"];
+        await sheets.spreadsheets.values.append({
+          spreadsheetId: SHEET_ID,
+          range: "A:E",
+          valueInputOption: "USER_ENTERED",
+          requestBody: { values: [headers, row] },
+        });
+        console.log("📝 Header row added:", headers);
+        console.log("✅ Added new row:", row);
+      } else {
+        // Append the new data row
+        await sheets.spreadsheets.values.append({
+          spreadsheetId: SHEET_ID,
+          range: "A:E",
+          valueInputOption: "USER_ENTERED",
+          requestBody: { values: [row] },
+        });
+        console.log("✅ Added new row:", row);
+      }
+
+      res.json({ success: true, message: "Data added to Google Sheets" });
+    } catch (err: any) {
+      console.error("❌ Google Sheets API error:", err);
+      res.status(500).json({ success: false, message: err.message });
+    }
   }
-});
+);
 
 app.listen(PORT, () => {
   console.log(`✅ Server running on http://localhost:${PORT}`);
