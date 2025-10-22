@@ -2,10 +2,11 @@
   "name": "namdao-wedding-invitation-be",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "build": "tsc",
-    "start": "node dist/server.js"
+    "start": "ts-node --esm ./src/server.ts"
   },
   "repository": {
     "type": "git",
@@ -23,8 +24,9 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^4.17.17",
     "@types/node": "^20.6.2",
+    "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^5.5.6"
+    "typescript": "^5.9.3"
   },
   "dependencies": {
     "cors": "^2.8.5",
