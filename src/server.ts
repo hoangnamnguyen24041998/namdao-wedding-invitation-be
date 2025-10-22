@@ -1,5 +1,4 @@
-import express from "express";
-import { Request, Response } from "express-serve-static-core";
+import express, { Request, Response } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { google } from "googleapis";
@@ -45,30 +44,28 @@ app.post("/confirm-attend", async (req: Request, res: Response) => {
 
     const values = readRes.data.values || [];
 
-    // Step 2️⃣: If no header exists → write headers first
+    // If no header exists, write headers first, then append the new data row.
     if (values.length === 0) {
       const headers = ["Thời gian", "Tên", "Xác nhận", "Số lượng", "Bên"];
       await sheets.spreadsheets.values.append({
         spreadsheetId: SHEET_ID,
         range: "A:E",
         valueInputOption: "USER_ENTERED",
+        requestBody: { values: [headers, row] },
+      });
+      console.log("📝 Header row added:", headers);
+      console.log("✅ Added new row:", row);
+    } else {
+      // Append the new data row
+      await sheets.spreadsheets.values.append({
+        spreadsheetId: SHEET_ID,
+        range: "A:E",
+        valueInputOption: "USER_ENTERED",
         requestBody: { values: [row] },
       });
-
-      console.log("📝 Header row added:", headers);
+      console.log("✅ Added new row:", row);
     }
 
-    // Step 3️⃣: Append the new data row
-    await sheets.spreadsheets.values.append({
-      spreadsheetId: SHEET_ID,
-      range: "A:E",
-      valueInputOption: "USER_ENTERED",
-      requestBody: {
-        values: [row],
-      },
-    });
-
-    console.log("✅ Added new row:", row);
     res.json({ success: true, message: "Data added to Google Sheets" });
   } catch (err: any) {
     console.error("❌ Google Sheets API error:", err);
