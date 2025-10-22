@@ -50,19 +50,18 @@ app.post("/confirm-attend", async (req, res) => {
         requestBody: { values: [headers, row] },
       });
       console.log("📝 Header row added:", headers);
-      console.log("✅ Added new row:", row);
-    } else {
-      await sheets.spreadsheets.values.append({
-        spreadsheetId: SHEET_ID,
-        range: "A:E",
-        valueInputOption: "USER_ENTERED",
-        requestBody: { values: [row] },
-      });
-      console.log("✅ Added new row:", row);
     }
 
+    await sheets.spreadsheets.values.append({
+      spreadsheetId: SHEET_ID,
+      range: "A:E",
+      valueInputOption: "USER_ENTERED",
+      requestBody: { values: [row] },
+    });
+    console.log("✅ Added new row:", row);
+
     res.json({ success: true, message: "Data added to Google Sheets" });
-  } catch (err: any) {
+  } catch (err) {
     console.error("❌ Google Sheets API error:", err);
     res.status(500).json({ success: false, message: err.message });
   }
