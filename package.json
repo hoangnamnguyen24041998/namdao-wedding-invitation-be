@@ -1,0 +1,36 @@
+{
+  "name": "namdao-wedding-invitation-be",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hoangnamnguyen24041998/namdao-wedding-invitation-be.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hoangnamnguyen24041998/namdao-wedding-invitation-be/issues"
+  },
+  "homepage": "https://github.com/hoangnamnguyen24041998/namdao-wedding-invitation-be#readme",
+  "description": "",
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^4.17.17",
+    "@types/node": "^20.6.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.5.6"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "googleapis": "^131.0.0",
+    "path": "^0.12.7"
+  }
+}
