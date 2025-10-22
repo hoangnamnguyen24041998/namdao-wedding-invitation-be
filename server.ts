@@ -207,10 +207,9 @@ app.get("/sent-wishes", async (req: Request, res: Response) => {
     }
 
     const customKeys = ["timestamp", "name", "wish"];
-
     const rows = values.slice(1);
 
-    const data = rows.map((row) => {
+    let data = rows.map((row) => {
       const entry: Record<string, string> = {};
       customKeys.forEach((key, index) => {
         entry[key] = row[index] || "";
@@ -218,12 +217,31 @@ app.get("/sent-wishes", async (req: Request, res: Response) => {
       return entry;
     });
 
+    data.sort((a, b) => {
+      const dateA = new Date(a.timestamp.split(" ").reverse().join(" "));
+      const dateB = new Date(b.timestamp.split(" ").reverse().join(" "));
+      return dateA.getTime() - dateB.getTime();
+    });
+
+    const { timestamp, name, wish } = req.query;
+
+    if (timestamp || name || wish) {
+      data = data.filter((entry) => {
+        return (
+          (!timestamp || entry.timestamp === timestamp) &&
+          (!name || entry.name === name) &&
+          (!wish || entry.wish === wish)
+        );
+      });
+    }
+
     res.json({ success: true, data });
   } catch (err: any) {
-    console.error("❌ Error reading attendance sheet:", err);
+    console.error("❌ Error reading wishes sheet:", err);
     res.status(500).json({ success: false, message: err.message });
   }
 });
+
 
 app.listen(PORT, () => {
   console.log(`✅ Server running on http://localhost:${PORT}`);
