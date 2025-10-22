@@ -67,7 +67,7 @@ app.post("/confirm-attend", async (req, res) => {
     console.log("✅ Added new row:", row);
 
     res.json({ success: true, message: "Data added to Google Sheets" });
-  } catch (err) {
+  } catch (err: any) {
     console.error("❌ Google Sheets API error:", err);
     res.status(500).json({ success: false, message: err.message });
   }
