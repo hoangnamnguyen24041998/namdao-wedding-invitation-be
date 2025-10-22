@@ -1,22 +1,14 @@
 {
 "compilerOptions": {
     "target": "ES2020",
-    "module": "NodeNext",
-    "strict": true,
-    "moduleResolution": "NodeNext",
+    "module": "ESNext",
+    "moduleResolution": "node",
     "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "outDir": "./dist",
-    "rootDir": "./src"
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true
 },
 "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    "**/*.js",
-    "**/*.jsx"
-], // Looks for all TS/TSX files recursively
-"exclude": [
-    "node_modules"
+    "src"
 ]
 }

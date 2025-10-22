@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Request, Response } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { google } from "googleapis";
@@ -15,18 +15,22 @@ const SHEET_ID = process.env.GOOGLE_SHEET_ID;
 app.use(cors({ origin: CORS_ORIGIN }));
 app.use(express.json());
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const CREDENTIALS_PATH = path.resolve(__dirname, "credentials.json");
+// const __filename = fileURLToPath(import.meta.url);
+// const __dirname = path.dirname(__filename);
+// const CREDENTIALS_PATH = path.resolve(__dirname, "credentials.json");
 
 const auth = new google.auth.GoogleAuth({
-  keyFile: CREDENTIALS_PATH,
+  keyFile: "./credentials.json",
   scopes: ["https://www.googleapis.com/auth/spreadsheets"],
 });
 
 const sheets = google.sheets({ version: "v4", auth });
 
-app.post("/confirm-attend", async (req, res) => {
+app.get("/", (req, res) => {
+  res.json({ mess: "NamDao Wedding Invitation Backend is running!" });
+});
+
+app.post("/confirm-attend", async (req: Request, res: Response) => {
   try {
     const { name, attendance, quantity, side } = req.body;
     if (!name || !attendance || !quantity || !side) {
@@ -56,14 +60,14 @@ app.post("/confirm-attend", async (req, res) => {
         requestBody: { values: [headers, row] },
       });
       console.log("📝 Header row added:", headers);
+    } else {
+      await sheets.spreadsheets.values.append({
+        spreadsheetId: SHEET_ID,
+        range: "A:E",
+        valueInputOption: "USER_ENTERED",
+        requestBody: { values: [row] },
+      });
     }
-
-    await sheets.spreadsheets.values.append({
-      spreadsheetId: SHEET_ID,
-      range: "A:E",
-      valueInputOption: "USER_ENTERED",
-      requestBody: { values: [row] },
-    });
     console.log("✅ Added new row:", row);
 
     res.json({ success: true, message: "Data added to Google Sheets" });
