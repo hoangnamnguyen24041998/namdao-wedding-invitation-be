@@ -11,8 +11,11 @@
     "rootDir": "./src"
 },
 "include": [
-    "src/**/*.ts"
-],
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.js",
+    "**/*.jsx"
+], // Looks for all TS/TSX files recursively
 "exclude": [
     "node_modules"
 ]
