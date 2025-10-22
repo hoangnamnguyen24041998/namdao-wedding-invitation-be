@@ -1,10 +1,8 @@
-node_modules
+# Sensitive files
+credentials.json
+src/config/credentials.json
 .env
-/src/config/credentials.json
 
-# Logs
-logs
-*.log
-
-# macOS
-.DS_Store
+# Node modules
+node_modules/
+dist/
