@@ -8,4 +8,7 @@
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true
 },
+"include": [
+    "."
+]
 }
