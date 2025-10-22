@@ -2,19 +2,25 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { google } from "googleapis";
+import path from "path";
+import { fileURLToPath } from "url";
 
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3002;
 const CORS_ORIGIN = process.env.CORS_ORIGIN || "*";
 const SHEET_ID = process.env.GOOGLE_SHEET_ID;
 
 app.use(cors({ origin: CORS_ORIGIN }));
 app.use(express.json());
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const CREDENTIALS_PATH = path.resolve(__dirname, "credentials.json");
+
 const auth = new google.auth.GoogleAuth({
-  keyFile: "./config/credentials.json",
+  keyFile: CREDENTIALS_PATH,
   scopes: ["https://www.googleapis.com/auth/spreadsheets"],
 });
 
