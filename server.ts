@@ -9,10 +9,16 @@ dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3002;
-const CORS_ORIGIN = process.env.CORS_ORIGIN || "*";
 const SHEET_ID = process.env.GOOGLE_SHEET_ID;
+const CORS_ORIGIN = process.env.CORS_ORIGIN || "*";
 
-app.use(cors({ origin: CORS_ORIGIN }));
+let corsOptions: cors.CorsOptions = {
+  methods: ["GET", "POST", "OPTIONS"],
+};
+
+const allowedOrigins = CORS_ORIGIN.split(",").map((url) => url.trim());
+corsOptions.origin = allowedOrigins;
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // const __filename = fileURLToPath(import.meta.url);
@@ -34,7 +40,6 @@ const auth = new google.auth.GoogleAuth({
   },
   scopes: ["https://www.googleapis.com/auth/spreadsheets"],
 });
-
 
 const sheets = google.sheets({ version: "v4", auth });
 
